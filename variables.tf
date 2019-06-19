@@ -6,12 +6,6 @@ variable "resource_group_name" {
   description = "Name of resource group to deploy resources in."
 }
 
-variable "create_resource_group" {
-  description = "If false it will not create / destroy resource group. Can be useful if resources should deploy to existing resource group."
-  type        = bool
-  default     = true
-}
-
 variable "location" {
   description = "Azure location where resources should be deployed."
 }
