@@ -1,6 +1,5 @@
 terraform {
   required_version = ">= 0.12.0"
-  backend "azurerm" {}
 }
 
 resource "azurerm_resource_group" "storage" {
