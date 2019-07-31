@@ -1,9 +1,0 @@
-resources:
-  repositories:
-  - repository: templates
-    type: github
-    name: avinor/azure-pipelines-templates
-    endpoint: avinor
-
-jobs:
-- template: terraform-modules.yaml@templates
