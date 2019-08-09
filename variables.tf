@@ -25,6 +25,12 @@ variable "access_tier" {
   default     = "Hot"
 }
 
+variable "enable_advanced_threat_protection" {
+  description = "Boolean flag which controls if advanced threat protection is enabled."
+  type        = bool
+  default     = false
+}
+
 variable "network_rules_ip_rules" {
   description = "Network rules restricting access to storage account on IP addresses."
   type        = list(string)

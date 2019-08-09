@@ -2,15 +2,19 @@
 
 Module to create an Azure storage account with set of containers (and access level). Storage account will enable encryption of file and blob and require https, these options are not possible to change. It is recommended to set the network policies to restrict access to account.
 
+To enable advanced threat procetion set the variable `enable_advanced_threat_protection` to true.
+
 ## Usage
 
-To just create a storage account with some containers have a look at the simple example.
+To just create a storage account with some containers have a look at the simple example. Examples use [tau](https://github.com/avinor/tau).
 
 ```terraform
-module "simple" {
+module {
     source = "avinor/storage-account/azurerm"
-    version = "1.0.0"
+    version = "1.2.0"
+}
 
+inputs {
     name = "simple"
     resource_group_name = "simple-rg"
     location = "westeurope"
@@ -48,10 +52,12 @@ events = [
 Example usage:
 
 ```terraform
-module "simple" {
+module {
     source = "avinor/storage-account/azurerm"
-    version = "1.0.0"
+    version = "1.2.0"
+}
 
+inputs {
     name = "simple"
     resource_group_name = "simple-rg"
     location = "westeurope"
