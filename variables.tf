@@ -25,6 +25,12 @@ variable "access_tier" {
   default     = "Hot"
 }
 
+variable "soft_delete_retention" {
+  description = "If set it will enable soft delete and set retention days."
+  type        = number
+  default     = 31
+}
+
 variable "enable_advanced_threat_protection" {
   description = "Boolean flag which controls if advanced threat protection is enabled."
   type        = bool
