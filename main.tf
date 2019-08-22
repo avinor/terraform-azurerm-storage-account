@@ -73,7 +73,6 @@ resource "null_resource" "soft_delete" {
 resource "azurerm_storage_container" "storage" {
   count                 = length(var.containers)
   name                  = var.containers[count.index].name
-  resource_group_name   = azurerm_resource_group.storage.name
   storage_account_name  = azurerm_storage_account.storage.name
   container_access_type = var.containers[count.index].access_type
 }
