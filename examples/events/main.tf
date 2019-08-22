@@ -1,5 +1,6 @@
 module "simple" {
-    source = "../../"
+    source = "avinor/storage-account/azurerm"
+    version = "1.3.0"
 
     name = "simple"
     resource_group_name = "simple-rg"
@@ -16,9 +17,9 @@ module "simple" {
         {
             name = "send_to_eventhub"
             filters = {
-                subject_begins_with = ""
+                subject_begins_with = "test"
             }
-            eventhub_id = ""
+            eventhub_id = "/subscription/..../eventhub-id"
         }
     ]
 }

@@ -17,6 +17,8 @@ locals {
   merged_events = [for event in var.events : merge(local.default_event_rule, event)]
 }
 
+data "azurerm_client_config" "current" {}
+
 resource "azurerm_resource_group" "storage" {
   name     = var.resource_group_name
   location = var.location
@@ -53,6 +55,17 @@ resource "azurerm_storage_account" "storage" {
   }
 
   tags = var.tags
+}
+
+resource "null_resource" "soft_delete" {
+  count = var.soft_delete_retention != null ? 1 : 0
+
+  # TODO Not possible to do with azuread resources
+  provisioner "local-exec" {
+    command = "az storage blob service-properties delete-policy update --days-retained ${var.soft_delete_retention} --account-name ${azurerm_storage_account.storage.name} --enable true --subscription ${data.azurerm_client_config.current.subscription_id}"
+  }
+
+  depends_on = ["azurerm_storage_account.storage"]
 }
 
 resource "azurerm_storage_container" "storage" {

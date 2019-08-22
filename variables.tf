@@ -21,8 +21,14 @@ variable "account_replication_type" {
 }
 
 variable "access_tier" {
-  description = "Defines the access tier for BlobStorage and StorageV2 accounts. Valid options are Hot and Cool, defaults to Hot."
+  description = "Defines the access tier for BlobStorage and StorageV2 accounts. Valid options are Hot and Cool."
   default     = "Hot"
+}
+
+variable "soft_delete_retention" {
+  description = "Number of retention days for soft delete. If set to null it will disable soft delete all together."
+  type        = number
+  default     = 31
 }
 
 variable "enable_advanced_threat_protection" {

@@ -4,6 +4,8 @@ Module to create an Azure storage account with set of containers (and access lev
 
 To enable advanced threat procetion set the variable `enable_advanced_threat_protection` to true.
 
+By default it will enable soft delete by using az cli command as it is not possible with the azurerm resource yet. To disable soft delete set `soft_delete_retention` to `null`. Otherwise set it to the number of retention days, default is 31.
+
 ## Usage
 
 To just create a storage account with some containers have a look at the simple example. Examples use [tau](https://github.com/avinor/tau).
@@ -11,7 +13,7 @@ To just create a storage account with some containers have a look at the simple 
 ```terraform
 module {
     source = "avinor/storage-account/azurerm"
-    version = "1.2.0"
+    version = "1.3.0"
 }
 
 inputs {
@@ -54,7 +56,7 @@ Example usage:
 ```terraform
 module {
     source = "avinor/storage-account/azurerm"
-    version = "1.2.0"
+    version = "1.3.0"
 }
 
 inputs {
@@ -73,7 +75,7 @@ inputs {
     events = [
         {
             name = "send_to_eventhub"
-            eventhub_id = "..id.."
+            eventhub_id = "/subscriptions/xxxx-xxxx-xxxx-xxxx/..../eventhub-id"
         }
     ]
 }
