@@ -37,16 +37,10 @@ variable "enable_advanced_threat_protection" {
   default     = false
 }
 
-variable "network_rules_ip_rules" {
-  description = "Network rules restricting access to storage account on IP addresses."
-  type        = list(string)
-  default     = []
-}
-
-variable "network_rules_subnet_ids" {
-  description = "Network rules restricting access to subnets."
-  type        = list(string)
-  default     = []
+variable "network_rules" {
+  description = "Network rules restricing access to the storage account."
+  type        = object({ ip_rules = list(string), subnet_ids = list(string), bypass = list(string) })
+  default     = null
 }
 
 variable "containers" {

@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 0.12.0"
   required_providers {
-    azurerm = ">= 1.32.0"
+    azurerm = ">= 1.33.0"
   }
 }
 
@@ -47,10 +47,12 @@ resource "azurerm_storage_account" "storage" {
   enable_https_traffic_only = true
 
   dynamic "network_rules" {
-    for_each = length(concat(var.network_rules_ip_rules, var.network_rules_subnet_ids)) > 0 ? ["true"] : []
+    for_each = var.network_rules != null ? ["true"] : []
     content {
-      ip_rules                   = var.network_rules_ip_rules
-      virtual_network_subnet_ids = var.network_rules_subnet_ids
+      default_action             = "Deny"
+      ip_rules                   = var.network_rules.ip_rules
+      virtual_network_subnet_ids = var.network_rules.subnet_ids
+      bypass                     = var.network_rules.bypass
     }
   }
 
