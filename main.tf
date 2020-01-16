@@ -67,7 +67,7 @@ resource "null_resource" "soft_delete" {
     command = "az storage blob service-properties delete-policy update --days-retained ${var.soft_delete_retention} --account-name ${azurerm_storage_account.storage.name} --enable true --subscription ${data.azurerm_client_config.current.subscription_id}"
   }
 
-  depends_on = ["azurerm_storage_account.storage"]
+  depends_on = [azurerm_storage_account.storage]
 }
 
 resource "azurerm_storage_container" "storage" {
