@@ -13,7 +13,7 @@ To just create a storage account with some containers have a look at the simple 
 ```terraform
 module {
     source = "avinor/storage-account/azurerm"
-    version = "1.3.0"
+    version = "2.0.0"
 }
 
 inputs {
@@ -56,7 +56,7 @@ Example usage:
 ```terraform
 module {
     source = "avinor/storage-account/azurerm"
-    version = "1.3.0"
+    version = "2.0.0"
 }
 
 inputs {
@@ -76,6 +76,50 @@ inputs {
         {
             name = "send_to_eventhub"
             eventhub_id = "/subscriptions/xxxx-xxxx-xxxx-xxxx/..../eventhub-id"
+        }
+    ]
+}
+```
+
+## Management Policy
+
+Manages an Azure Storage Account Lifecycle Management.
+
+```terraform
+lifecycles = [
+    {
+        prefix_match = required (list(string))
+        delete_after_days = required (number)
+    }
+]
+```
+
+Example usage:
+
+```terraform
+module {
+    source = "avinor/storage-account/azurerm"
+    version = "2.0.0"
+}
+inputs {
+    name = "simple"
+    resource_group_name = "simple-rg"
+    location = "westeurope"
+    containers = [
+        {
+            name = "container"
+            access_type = "private"
+        }
+    ]
+    # Add lifecycles
+    lifecycles = [
+        {
+            prefix_match = ["container/path"]
+            delete_after_days = 2
+        },
+        {
+            prefix_match = ["container/another_path"]
+            delete_after_days = 5
         }
     ]
 }
