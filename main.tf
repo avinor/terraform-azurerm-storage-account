@@ -106,6 +106,8 @@ resource "azurerm_eventgrid_event_subscription" "storage" {
 }
 
 resource "azurerm_storage_management_policy" "storage" {
+  count = length(var.lifecycles) == 0 ? 0 : 1
+
   storage_account_id = azurerm_storage_account.storage.id
 
   dynamic "rule" {
