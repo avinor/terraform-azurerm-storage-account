@@ -1,8 +1,10 @@
 terraform {
   required_version = ">= 0.12.0"
-  required_providers {
-    azurerm = ">= 1.33.0"
-  }
+}
+
+provider azurerm {
+  version = "~> 2.2.0"
+  features {}
 }
 
 locals {
@@ -40,10 +42,6 @@ resource "azurerm_storage_account" "storage" {
   account_tier                      = var.account_tier
   account_replication_type          = var.account_replication_type
   access_tier                       = var.access_tier
-  enable_advanced_threat_protection = var.enable_advanced_threat_protection
-
-  enable_blob_encryption    = true
-  enable_file_encryption    = true
   enable_https_traffic_only = true
 
   dynamic "network_rules" {
@@ -57,6 +55,11 @@ resource "azurerm_storage_account" "storage" {
   }
 
   tags = var.tags
+}
+
+resource "azurerm_advanced_threat_protection"  "threat_protection" {
+  target_resource_id = azurerm_storage_account.storage.id
+  enabled = var.enable_advanced_threat_protection
 }
 
 resource "null_resource" "soft_delete" {
@@ -98,6 +101,28 @@ resource "azurerm_eventgrid_event_subscription" "storage" {
     content {
       subject_begins_with = lookup(local.merged_events[count.index].filters, "subject_begins_with", null) == null ? null : var.events[count.index].filters.subject_begins_with
       subject_ends_with   = lookup(local.merged_events[count.index].filters, "subject_ends_with", null) == null ? null : var.events[count.index].filters.subject_ends_with
+    }
+  }
+}
+
+resource "azurerm_storage_management_policy" "storage" {
+  storage_account_id = azurerm_storage_account.storage.id
+
+  dynamic "rule" {
+    for_each = var.lifecycles
+    iterator = rule
+    content {
+      name    = "rule${rule.key}"
+      enabled = true
+      filters {
+        prefix_match = rule.value.prefix_match
+        blob_types   = ["blockBlob"]
+      }
+      actions {
+        base_blob {
+          delete_after_days_since_modification_greater_than = rule.value.delete_after_days
+        }
+      }
     }
   }
 }
