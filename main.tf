@@ -111,7 +111,7 @@ resource "azurerm_storage_management_policy" "storage" {
   storage_account_id = azurerm_storage_account.storage.id
 
   dynamic "rule" {
-    for_each = toset(var.lifecycles)
+    for_each = var.lifecycles
     iterator = rule
     content {
       name    = "rule${rule.key}"
