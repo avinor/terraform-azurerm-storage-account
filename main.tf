@@ -35,13 +35,13 @@ resource "random_string" "unique" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                              = format("%s%ssa", lower(replace(var.name, "/[[:^alnum:]]/", "")), random_string.unique.result)
-  resource_group_name               = azurerm_resource_group.storage.name
-  location                          = azurerm_resource_group.storage.location
-  account_kind                      = "StorageV2"
-  account_tier                      = var.account_tier
-  account_replication_type          = var.account_replication_type
-  access_tier                       = var.access_tier
+  name                      = format("%s%ssa", lower(replace(var.name, "/[[:^alnum:]]/", "")), random_string.unique.result)
+  resource_group_name       = azurerm_resource_group.storage.name
+  location                  = azurerm_resource_group.storage.location
+  account_kind              = "StorageV2"
+  account_tier              = var.account_tier
+  account_replication_type  = var.account_replication_type
+  access_tier               = var.access_tier
   enable_https_traffic_only = true
 
   dynamic "network_rules" {
@@ -57,9 +57,9 @@ resource "azurerm_storage_account" "storage" {
   tags = var.tags
 }
 
-resource "azurerm_advanced_threat_protection"  "threat_protection" {
+resource "azurerm_advanced_threat_protection" "threat_protection" {
   target_resource_id = azurerm_storage_account.storage.id
-  enabled = var.enable_advanced_threat_protection
+  enabled            = var.enable_advanced_threat_protection
 }
 
 resource "null_resource" "soft_delete" {

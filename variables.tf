@@ -63,6 +63,6 @@ variable "tags" {
 
 variable "lifecycles" {
   description = "List of lifecycle delete"
-  type        = list(object({ prefix_match = set(string), delete_after_days = number}))
+  type        = list(object({ prefix_match = set(string), delete_after_days = number }))
   default     = []
 }
