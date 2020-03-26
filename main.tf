@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.12.0"
+  required_version = ">= 0.12.6"
 }
 
 provider azurerm {
@@ -14,6 +14,7 @@ locals {
     labels                = null
     filters               = null
     eventhub_id           = null
+    included_event_types  = null
   }
 
   merged_events = [for event in var.events : merge(local.default_event_rule, event)]
@@ -88,6 +89,7 @@ resource "azurerm_eventgrid_event_subscription" "storage" {
   event_delivery_schema = local.merged_events[count.index].event_delivery_schema
   topic_name            = local.merged_events[count.index].topic_name
   labels                = local.merged_events[count.index].labels
+  included_event_types  = local.merged_events[count.index].included_event_types
 
   dynamic "eventhub_endpoint" {
     for_each = local.merged_events[count.index].eventhub_id == null ? [] : [true]

@@ -33,6 +33,7 @@ inputs {
                 subject_begins_with = "test"
             }
             eventhub_id = dependency.eventhub.outputs.id
+            included_event_types = ["Microsoft.Storage.BlobCreated", "Microsoft.Storage.BlobDeleted"]
         }
     ]
 }

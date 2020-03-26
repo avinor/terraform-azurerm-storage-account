@@ -42,6 +42,7 @@ events = [
         topic_name = optional(string)
         labels = optional(list(string))
         eventhub_id = required
+        included_event_types = optional(list(string))
 
         filters = optional({
             subject_begins_with = optional(string)
