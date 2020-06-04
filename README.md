@@ -4,7 +4,7 @@ Module to create an Azure storage account with set of containers (and access lev
 
 To enable advanced threat procetion set the variable `enable_advanced_threat_protection` to true.
 
-By default it will enable soft delete by using az cli command as it is not possible with the azurerm resource yet. To disable soft delete set `soft_delete_retention` to `null`. Otherwise set it to the number of retention days, default is 31.
+To disable soft delete set `soft_delete_retention` to `null`. Otherwise set it to the number of retention days, default is 31.
 
 ## Usage
 
@@ -32,7 +32,11 @@ inputs {
 
 ## Events
 
-It is also possible to connect Event Grid subscriptions to storage account and send event to an Event Hub. This requires the `events` variable to be set. Since variable object doesn´t support optional properties it uses `any` instead. The input object looks like this:
+It is also possible to connect Event Grid subscriptions to storage account and send event to an Event Hub or a ServiceBus. 
+This requires the `events` variable to be set. 
+Since variable object doesn´t support optional properties it uses `any` instead.
+NB! One of eventhub_id, service_bus_topic_id or service_bus_queue_id must be set.  
+The input object looks like this:
 
 ```terraform
 events = [
@@ -41,7 +45,9 @@ events = [
         event_delivery_schema = optional(string)
         topic_name = optional(string)
         labels = optional(list(string))
-        eventhub_id = required
+        eventhub_id = optional(string)
+        service_bus_topic_id = optional(string)
+        service_bus_queue_id = optional(string)
         included_event_types = optional(list(string))
 
         filters = optional({
