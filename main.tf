@@ -3,8 +3,12 @@ terraform {
 }
 
 provider azurerm {
-  version = "~> 2.2.0"
+  version = "~> 2.12.0"
   features {}
+}
+
+provider random {
+  version = "~> 2.2"
 }
 
 locals {
@@ -14,13 +18,13 @@ locals {
     labels                = null
     filters               = null
     eventhub_id           = null
+    service_bus_topic_id  = null
+    service_bus_queue_id  = null
     included_event_types  = null
   }
 
   merged_events = [for event in var.events : merge(local.default_event_rule, event)]
 }
-
-data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "storage" {
   name     = var.resource_group_name
@@ -45,6 +49,12 @@ resource "azurerm_storage_account" "storage" {
   access_tier               = var.access_tier
   enable_https_traffic_only = true
 
+  blob_properties {
+    delete_retention_policy {
+      days = var.soft_delete_retention
+    }
+  }
+
   dynamic "network_rules" {
     for_each = var.network_rules != null ? ["true"] : []
     content {
@@ -63,17 +73,6 @@ resource "azurerm_advanced_threat_protection" "threat_protection" {
   enabled            = var.enable_advanced_threat_protection
 }
 
-resource "null_resource" "soft_delete" {
-  count = var.soft_delete_retention != null ? 1 : 0
-
-  # TODO Not possible to do with azuread resources
-  provisioner "local-exec" {
-    command = "az storage blob service-properties delete-policy update --days-retained ${var.soft_delete_retention} --account-name ${azurerm_storage_account.storage.name} --enable true --subscription ${data.azurerm_client_config.current.subscription_id}"
-  }
-
-  depends_on = [azurerm_storage_account.storage]
-}
-
 resource "azurerm_storage_container" "storage" {
   count                 = length(var.containers)
   name                  = var.containers[count.index].name
@@ -86,17 +85,13 @@ resource "azurerm_eventgrid_event_subscription" "storage" {
   name  = local.merged_events[count.index].name
   scope = azurerm_storage_account.storage.id
 
-  event_delivery_schema = local.merged_events[count.index].event_delivery_schema
-  topic_name            = local.merged_events[count.index].topic_name
-  labels                = local.merged_events[count.index].labels
-  included_event_types  = local.merged_events[count.index].included_event_types
-
-  dynamic "eventhub_endpoint" {
-    for_each = local.merged_events[count.index].eventhub_id == null ? [] : [true]
-    content {
-      eventhub_id = local.merged_events[count.index].eventhub_id
-    }
-  }
+  event_delivery_schema         = local.merged_events[count.index].event_delivery_schema
+  topic_name                    = local.merged_events[count.index].topic_name
+  labels                        = local.merged_events[count.index].labels
+  included_event_types          = local.merged_events[count.index].included_event_types
+  eventhub_endpoint_id          = local.merged_events[count.index].eventhub_id
+  service_bus_topic_endpoint_id = local.merged_events[count.index].service_bus_topic_id
+  service_bus_queue_endpoint_id = local.merged_events[count.index].service_bus_queue_id
 
   dynamic "subject_filter" {
     for_each = local.merged_events[count.index].filters == null ? [] : [true]
