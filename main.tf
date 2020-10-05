@@ -3,18 +3,17 @@ terraform {
 }
 
 provider azurerm {
-  version = "~> 2.12.0"
+  version = "~> 2.30.0"
   features {}
 }
 
 provider random {
-  version = "~> 2.2"
+  version = "~> 2.3"
 }
 
 locals {
   default_event_rule = {
     event_delivery_schema = null
-    topic_name            = null
     labels                = null
     filters               = null
     eventhub_id           = null
@@ -86,7 +85,6 @@ resource "azurerm_eventgrid_event_subscription" "storage" {
   scope = azurerm_storage_account.storage.id
 
   event_delivery_schema         = local.merged_events[count.index].event_delivery_schema
-  topic_name                    = local.merged_events[count.index].topic_name
   labels                        = local.merged_events[count.index].labels
   included_event_types          = local.merged_events[count.index].included_event_types
   eventhub_endpoint_id          = local.merged_events[count.index].eventhub_id
