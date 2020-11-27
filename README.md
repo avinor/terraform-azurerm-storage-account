@@ -43,7 +43,6 @@ events = [
     {
         name = required
         event_delivery_schema = optional(string)
-        topic_name = optional(string)
         labels = optional(list(string))
         eventhub_id = optional(string)
         service_bus_topic_id = optional(string)
