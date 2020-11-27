@@ -1,5 +1,5 @@
 variable "name" {
-  description = "Name of storage account, if it contains illigal characters (,-_ etc) those will be truncated."
+  description = "Name of storage account, if it contains illegal characters (,-_ etc) those will be truncated."
 }
 
 variable "resource_group_name" {
@@ -38,15 +38,22 @@ variable "enable_advanced_threat_protection" {
 }
 
 variable "network_rules" {
-  description = "Network rules restricing access to the storage account."
-  type        = object({ ip_rules = list(string), subnet_ids = list(string), bypass = list(string) })
-  default     = null
+  description = "Network rules restricting access to the storage account."
+  type = object({
+    ip_rules   = list(string),
+    subnet_ids = list(string),
+    bypass     = list(string)
+  })
+  default = null
 }
 
 variable "containers" {
   description = "List of containers to create and their access levels."
-  type        = list(object({ name = string, access_type = string }))
-  default     = []
+  type = list(object({
+    name        = string,
+    access_type = string
+  }))
+  default = []
 }
 
 variable "events" {
@@ -63,6 +70,9 @@ variable "tags" {
 
 variable "lifecycles" {
   description = "List of lifecycle delete"
-  type        = list(object({ prefix_match = set(string), delete_after_days = number }))
-  default     = []
+  type = list(object({
+    prefix_match      = set(string),
+    delete_after_days = number
+  }))
+  default = []
 }

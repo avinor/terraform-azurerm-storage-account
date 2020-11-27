@@ -1,6 +1,5 @@
 module "simple" {
-  source  = "avinor/storage-account/azurerm"
-  version = "2.0.0"
+  source = "../../"
 
   name                = "simple"
   resource_group_name = "simple-rg"
