@@ -31,6 +31,12 @@ variable "soft_delete_retention" {
   default     = 31
 }
 
+variable "cors_rule" {
+  description = "CORS rules for storage account."
+  type = list(object({ allowed_origins = list(string), allowed_methods = list(string), allowed_headers = list(string), exposed_headers = list(string), max_age_in_seconds = number }))
+  default = []
+}
+
 variable "enable_advanced_threat_protection" {
   description = "Boolean flag which controls if advanced threat protection is enabled."
   type        = bool
