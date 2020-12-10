@@ -33,7 +33,13 @@ variable "soft_delete_retention" {
 
 variable "cors_rule" {
   description = "CORS rules for storage account."
-  type = list(object({ allowed_origins = list(string), allowed_methods = list(string), allowed_headers = list(string), exposed_headers = list(string), max_age_in_seconds = number }))
+  type = list(object({
+    allowed_origins    = list(string),
+    allowed_methods    = list(string),
+    allowed_headers    = list(string),
+    exposed_headers    = list(string),
+    max_age_in_seconds = number
+  }))
   default = []
 }
 
