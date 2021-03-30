@@ -2,9 +2,9 @@
 
 Module to create an Azure storage account with set of containers (and access level). Storage account will enable encryption of file and blob and require https, these options are not possible to change. It is recommended to set the network policies to restrict access to account.
 
-To enable advanced threat procetion set the variable `enable_advanced_threat_protection` to true.
+To enable advanced threat protection set the variable `enable_advanced_threat_protection` to true.
 
-To disable soft delete set `soft_delete_retention` to `null`. Otherwise set it to the number of retention days, default is 31.
+To disable soft delete set `soft_delete_retention` to `null`. Otherwise, set it to the number of retention days, default is 31.
 
 ## Usage
 
