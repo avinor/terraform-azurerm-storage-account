@@ -154,13 +154,13 @@ resource "azurerm_storage_management_policy" "storage" {
 }
 
 data "azurerm_monitor_diagnostic_categories" "default" {
-  resource_id = azurerm_storage_account.storage.id
+  resource_id = "${azurerm_storage_account.storage.id}/blobServices/default"
 }
 
 resource "azurerm_monitor_diagnostic_setting" "diag" {
   count                          = var.diagnostics != null ? 1 : 0
   name                           = "${var.name}-sa-diag"
-  target_resource_id             = azurerm_storage_account.storage.id
+  target_resource_id             = "${azurerm_storage_account.storage.id}/blobServices/default"
   log_analytics_workspace_id     = local.parsed_diag.log_analytics_id
   eventhub_authorization_rule_id = local.parsed_diag.event_hub_auth_id
   eventhub_name                  = local.parsed_diag.event_hub_auth_id != null ? var.diagnostics.eventhub_name : null
