@@ -34,10 +34,10 @@ variable "soft_delete_retention" {
 variable "cors_rule" {
   description = "CORS rules for storage account."
   type = list(object({
-    allowed_origins    = list(string),
-    allowed_methods    = list(string),
-    allowed_headers    = list(string),
-    exposed_headers    = list(string),
+    allowed_origins    = list(string)
+    allowed_methods    = list(string)
+    allowed_headers    = list(string)
+    exposed_headers    = list(string)
     max_age_in_seconds = number
   }))
   default = []
@@ -52,8 +52,8 @@ variable "enable_advanced_threat_protection" {
 variable "network_rules" {
   description = "Network rules restricting access to the storage account."
   type = object({
-    ip_rules   = list(string),
-    subnet_ids = list(string),
+    ip_rules   = list(string)
+    subnet_ids = list(string)
     bypass     = list(string)
   })
   default = null
@@ -62,7 +62,7 @@ variable "network_rules" {
 variable "containers" {
   description = "List of containers to create and their access levels."
   type = list(object({
-    name        = string,
+    name        = string
     access_type = string
   }))
   default = []
@@ -83,8 +83,19 @@ variable "tags" {
 variable "lifecycles" {
   description = "List of lifecycle delete"
   type = list(object({
-    prefix_match      = set(string),
+    prefix_match      = set(string)
     delete_after_days = number
   }))
   default = []
+}
+
+variable "diagnostics" {
+  description = "Diagnostic settings for those resources that support it. See README.md for details on configuration."
+  type = object({
+    destination   = string
+    eventhub_name = string
+    logs          = list(string)
+    metrics       = list(string)
+  })
+  default = null
 }
