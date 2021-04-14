@@ -16,10 +16,6 @@ provider azurerm {
   features {}
 }
 
-provider random {
-  version = "~> 2.2"
-}
-
 locals {
   default_event_rule = {
     event_delivery_schema = null
