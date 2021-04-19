@@ -66,6 +66,7 @@ resource "azurerm_storage_account" "storage" {
   account_replication_type  = var.account_replication_type
   access_tier               = var.access_tier
   enable_https_traffic_only = true
+  min_tls_version           = var.min_tls_version
 
   blob_properties {
     delete_retention_policy {

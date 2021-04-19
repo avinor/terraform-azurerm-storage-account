@@ -25,6 +25,11 @@ variable "access_tier" {
   default     = "Hot"
 }
 
+variable "min_tls_version" {
+  description = "The minimum supported TLS version for the storage account. Possible values are TLS1_0, TLS1_1, and TLS1_2."
+  default     = "TLS1_2"
+}
+
 variable "soft_delete_retention" {
   description = "Number of retention days for soft delete. If set to null it will disable soft delete all together."
   type        = number
