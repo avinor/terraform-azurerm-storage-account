@@ -6,7 +6,7 @@ terraform {
       version = "~> 2.56.0"
     }
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = "~> 3.1.0"
     }
   }
@@ -99,6 +99,7 @@ resource "azurerm_storage_account" "storage" {
 }
 
 resource "azurerm_advanced_threat_protection" "threat_protection" {
+  count              = var.enable_advanced_threat_protection ? 1 : 0
   target_resource_id = azurerm_storage_account.storage.id
   enabled            = var.enable_advanced_threat_protection
 }
