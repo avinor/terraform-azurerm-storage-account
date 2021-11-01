@@ -43,6 +43,9 @@ locals {
     metric             = []
     log                = []
   }
+
+  randomized_name = format("%s%ssa", lower(replace(var.name, "/[[:^alnum:]]/", "")), random_string.unique.result)
+  name = var.exact_name ? var.name : local.randomized_name
 }
 
 resource "azurerm_resource_group" "storage" {
@@ -59,7 +62,7 @@ resource "random_string" "unique" {
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                      = format("%s%ssa", lower(replace(var.name, "/[[:^alnum:]]/", "")), random_string.unique.result)
+  name                      = local.name
   resource_group_name       = azurerm_resource_group.storage.name
   location                  = azurerm_resource_group.storage.location
   account_kind              = "StorageV2"
@@ -162,7 +165,7 @@ data "azurerm_monitor_diagnostic_categories" "default" {
 
 resource "azurerm_monitor_diagnostic_setting" "diag" {
   count                          = var.diagnostics != null ? 1 : 0
-  name                           = "${var.name}-sa-diag"
+  name                           = "${local.name}-sa-diag"
   target_resource_id             = "${azurerm_storage_account.storage.id}/blobServices/default"
   log_analytics_workspace_id     = local.parsed_diag.log_analytics_id
   eventhub_authorization_rule_id = local.parsed_diag.event_hub_auth_id

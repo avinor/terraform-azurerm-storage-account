@@ -1,5 +1,12 @@
 variable "name" {
-  description = "Name of storage account, if it contains illegal characters (,-_ etc) those will be truncated."
+  description = "Name of storage account. Unless var.exact_name is true any illegal characters (,-_ etc) will be truncated and 6 random characters will be appended to this value."
+  type        = string
+}
+
+variable "exact_name" {
+  description = "When true, var.name is used exactly as passed"
+  type        = bool
+  default     = false
 }
 
 variable "resource_group_name" {
