@@ -2,6 +2,7 @@ module "simple" {
   source = "../../"
 
   name                = "simple"
+  exact_name          = true
   resource_group_name = "simple-rg"
   location            = "westeurope"
 
