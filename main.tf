@@ -3,7 +3,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 2.83.0"
+      version = "~> 2.99.0"
     }
     random = {
       source  = "hashicorp/random"
@@ -45,7 +45,7 @@ locals {
   }
 
   randomized_name = format("%s%ssa", lower(replace(var.name, "/[[:^alnum:]]/", "")), random_string.unique.result)
-  name = var.exact_name ? var.name : local.randomized_name
+  name            = var.exact_name ? var.name : local.randomized_name
 }
 
 resource "azurerm_resource_group" "storage" {
