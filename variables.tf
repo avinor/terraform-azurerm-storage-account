@@ -22,6 +22,11 @@ variable "account_tier" {
   default     = "Standard"
 }
 
+variable "account_kind" {
+  description = "Defines the Kind of account. Valid options are BlobStorage, BlockBlobStorage, FileStorage, Storage and StorageV2. Changing this forces a new resource to be created. Defaults to StorageV2."
+  default     = "StorageV2"
+}
+
 variable "account_replication_type" {
   description = "Defines the type of replication to use for this storage account. Valid options are LRS, GRS, RAGRS and ZRS."
   default     = "ZRS"
