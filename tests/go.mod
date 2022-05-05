@@ -2,7 +2,7 @@ module github.com/avinor/terraform-azurerm-event-hubs/test
 
 go 1.18
 
-require github.com/gruntwork-io/terratest v0.40.6
+require github.com/gruntwork-io/terratest v0.40.7
 
 require (
 	cloud.google.com/go v0.83.0 // indirect
