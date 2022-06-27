@@ -163,7 +163,7 @@ data "azurerm_monitor_diagnostic_categories" "default" {
   resource_id = "${azurerm_storage_account.storage.id}/blobServices/default"
 }
 
-resource "azurerm_monitor_diagnostic_setting" "diag" {
+resource "azurerm_monitor_diagnostic_setting" "sa" {
   count                          = var.diagnostics != null ? 1 : 0
   name                           = "${var.name}-sa-diag"
   target_resource_id             = "${azurerm_storage_account.storage.id}/blobServices/default"
