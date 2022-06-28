@@ -13,6 +13,14 @@ variable "resource_group_name" {
   description = "Name of resource group to deploy resources in."
 }
 
+variable "resource_group_create" {
+  description = "Create resource group. Defaults to true"
+  default     = true
+  type        = bool
+}
+
+
+
 variable "location" {
   description = "Azure location where resources should be deployed."
 }

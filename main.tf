@@ -49,6 +49,7 @@ locals {
 }
 
 resource "azurerm_resource_group" "storage" {
+  count    = var.resource_group_create ? 1 : 0
   name     = var.resource_group_name
   location = var.location
 
@@ -63,8 +64,8 @@ resource "random_string" "unique" {
 
 resource "azurerm_storage_account" "storage" {
   name                      = local.name
-  resource_group_name       = azurerm_resource_group.storage.name
-  location                  = azurerm_resource_group.storage.location
+  resource_group_name       = var.resource_group_name
+  location                  = var.location
   account_kind              = var.account_kind
   account_tier              = var.account_tier
   account_replication_type  = var.account_replication_type
