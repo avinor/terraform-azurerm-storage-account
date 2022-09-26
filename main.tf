@@ -174,7 +174,7 @@ resource "azurerm_monitor_diagnostic_setting" "sa" {
   storage_account_id             = local.parsed_diag.storage_account_id
 
   dynamic "log" {
-    for_each = data.azurerm_monitor_diagnostic_categories.default.logs
+    for_each = data.azurerm_monitor_diagnostic_categories.default.log_category_types
     content {
       category = log.value
       enabled  = contains(local.parsed_diag.log, "all") || contains(local.parsed_diag.log, log.value)
