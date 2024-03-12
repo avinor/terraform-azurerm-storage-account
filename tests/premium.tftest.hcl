@@ -1,5 +1,4 @@
-module "premium" {
-  source = "../../"
+variables {
 
   name                = "premium"
   resource_group_name = "premium-rg"
@@ -14,4 +13,9 @@ module "premium" {
       access_type = "private"
     },
   ]
+
+}
+
+run "simple" {
+  command = plan
 }
