@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 0.13"
+  required_version = ">= 1.3"
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -17,6 +17,16 @@ provider "azurerm" {
 }
 
 locals {
+  containers_role_assignments = flatten([
+    for i in var.containers : [
+      for a in i.role_assignments : {
+        principal_id         = a.principal_id
+        role_definition_name = a.role_definition_name
+        container_name       = i.name
+      }
+    ]
+  ])
+
   default_event_rule = {
     event_delivery_schema = null
     labels                = null
@@ -113,6 +123,26 @@ resource "azurerm_storage_container" "storage" {
   name                  = var.containers[count.index].name
   storage_account_name  = azurerm_storage_account.storage.name
   container_access_type = var.containers[count.index].access_type
+}
+
+resource "azurerm_role_assignment" "main" {
+  for_each = {
+    for i in var.role_assignments : format("%s-%s", i.principal_id, replace(i.role_definition_name, " ", "")) => i
+  }
+
+  principal_id         = each.value.principal_id
+  role_definition_name = each.value.role_definition_name
+  scope                = azurerm_storage_account.storage.id
+}
+
+resource "azurerm_role_assignment" "containers" {
+  for_each = {
+    for i in local.containers_role_assignments : format("%s-%s-%s", i.container_name, i.principal_id, replace(i.role_definition_name, " ", "")) => i
+  }
+
+  principal_id         = each.value.principal_id
+  role_definition_name = each.value.role_definition_name
+  scope                = format("%s/blobServices/default/containers/%s", azurerm_storage_account.storage.id, each.value.container_name)
 }
 
 resource "azurerm_eventgrid_event_subscription" "storage" {
