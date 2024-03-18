@@ -19,8 +19,6 @@ variable "resource_group_create" {
   type        = bool
 }
 
-
-
 variable "location" {
   description = "Azure location where resources should be deployed."
 }
@@ -85,10 +83,23 @@ variable "network_rules" {
 }
 
 variable "containers" {
-  description = "List of containers to create and their access levels."
+  description = "List of containers to create in the storage account."
   type = list(object({
     name        = string
     access_type = string
+    role_assignments = optional(list(object({
+      principal_id         = string
+      role_definition_name = string
+    })), [])
+  }))
+  default = []
+}
+
+variable "role_assignments" {
+  description = "Role assignments for this storage account."
+  type = list(object({
+    principal_id         = string
+    role_definition_name = string
   }))
   default = []
 }
